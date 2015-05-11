@@ -12,6 +12,8 @@
 #import "LeftPanelViewController.h"
 
 #define CORNER_RADIUS 4
+#define SLIDE_TIMING .25
+#define PANEL_WIDTH 60
 #define CENTER_TAG 1
 #define LEFT_TAG 2
 
@@ -71,7 +73,7 @@
 {
     // setup center view
     self.centerVC = [[CenterViewController alloc] initWithNibName:@"CenterViewController" bundle:nil];
-    [self.centerVC.view setFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height-20)];
+    [self.centerVC.view setFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-20)];
     self.centerVC.view.tag = CENTER_TAG;
     self.centerVC.delegate = self;
     
@@ -150,6 +152,16 @@
 
 - (void)movePanelRight // to show left panel
 {
+    UIView *childView = [self getLeftView];
+    [self.view sendSubviewToBack:childView];
+    
+    [UIView animateWithDuration:SLIDE_TIMING animations:^{
+        _centerVC.view.frame = CGRectMake(self.view.frame.size.width - PANEL_WIDTH, 0, self.view.frame.size.width, self.view.frame.size.height);
+    } completion:^(BOOL finished) {
+        if (finished) {
+            _centerVC.leftButton.tag = 0;
+        }
+    }];
 }
 
 - (void)movePanelToOriginalPosition
