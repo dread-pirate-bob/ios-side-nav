@@ -7,12 +7,18 @@
 //
 
 #import "MainViewController.h"
+#import <QuartzCore/QuartzCore.h>
 #import "CenterViewController.h"
+#import "LeftPanelViewController.h"
 
+#define CORNER_RADIUS 4
 #define CENTER_TAG 1
+#define LEFT_TAG 2
 
 @interface MainViewController () <CenterViewControllerDelegate>
 @property (nonatomic,strong) CenterViewController *centerVC;
+@property (nonatomic,strong) LeftPanelViewController *leftVC;
+@property (nonatomic,assign) BOOL showingLeftPanel;
 @end
 
 @implementation MainViewController
@@ -78,6 +84,15 @@
 
 - (void)showCenterViewWithShadow:(BOOL)value withOffset:(double)offset
 {
+    if (value) {
+        [_centerVC.view.layer setCornerRadius:CORNER_RADIUS];
+        [_centerVC.view.layer setShadowColor:[UIColor blackColor].CGColor];
+        [_centerVC.view.layer setShadowOpacity:0.8];
+        [_centerVC.view.layer setShadowOffset:CGSizeMake(offset, offset)];
+    } else {
+        [_centerVC.view.layer setCornerRadius:0.0f];
+        [_centerVC.view.layer setShadowOffset:CGSizeMake(offset, offset)];
+    }
 }
 
 - (void)resetMainView
@@ -86,7 +101,24 @@
 
 - (UIView *)getLeftView
 {    
-    UIView *view = nil;
+    if (_leftVC == nil) {
+        self.leftVC = [[LeftPanelViewController alloc] initWithNibName:@"LeftPanelViewController" bundle:nil];
+        self.leftVC.view.tag = LEFT_TAG;
+        self.leftVC.delegate = _centerVC;
+        
+        // VC containment methods
+        [self.view addSubview:self.leftVC.view];
+        [self addChildViewController:_leftVC];
+        [_leftVC didMoveToParentViewController:self];
+        
+        _leftVC.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    }
+    
+    self.showingLeftPanel = YES;
+    
+    [self showCenterViewWithShadow:YES withOffset:-2];
+    
+    UIView *view = self.leftVC.view;
     return view;
 }
 
