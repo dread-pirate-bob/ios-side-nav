@@ -16,7 +16,10 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+    
+    // Create MainViewController, the container for left|center|right VCs
     self.viewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
+    
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     return YES;

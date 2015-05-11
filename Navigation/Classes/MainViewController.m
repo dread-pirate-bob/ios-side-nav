@@ -7,9 +7,12 @@
 //
 
 #import "MainViewController.h"
+#import "CenterViewController.h"
 
-@interface MainViewController ()
+#define CENTER_TAG 1
 
+@interface MainViewController () <CenterViewControllerDelegate>
+@property (nonatomic,strong) CenterViewController *centerVC;
 @end
 
 @implementation MainViewController
@@ -61,6 +64,16 @@
 - (void)setupView
 {
     // setup center view
+    self.centerVC = [[CenterViewController alloc] initWithNibName:@"CenterViewController" bundle:nil];
+    [self.centerVC.view setFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height-20)];
+    self.centerVC.view.tag = CENTER_TAG;
+    self.centerVC.delegate = self;
+    
+    [self.view addSubview:self.centerVC.view];
+    [self addChildViewController:_centerVC]; // access iVar
+    
+    [_centerVC didMoveToParentViewController:self];
+    
 }
 
 - (void)showCenterViewWithShadow:(BOOL)value withOffset:(double)offset
