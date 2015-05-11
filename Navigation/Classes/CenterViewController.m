@@ -84,6 +84,17 @@
 // show right panel
 - (IBAction)btnMovePanelLeft:(id)sender
 {
+    // 0 when panel displayed, 1 not displayed
+    UIButton *button = sender;
+    switch (button.tag) {
+        case 0:
+            [_delegate movePanelToOriginalPosition];
+            break;
+        case 1:
+            [_delegate movePanelLeft];
+        default:
+            break;
+    }
 }
 
 #pragma mark -

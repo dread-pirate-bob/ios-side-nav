@@ -10,17 +10,21 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CenterViewController.h"
 #import "LeftPanelViewController.h"
+#import "RightPanelViewController.h"
 
 #define CORNER_RADIUS 4
 #define SLIDE_TIMING .25
 #define PANEL_WIDTH 60
 #define CENTER_TAG 1
 #define LEFT_TAG 2
+#define RIGHT_TAG 3
 
 @interface MainViewController () <CenterViewControllerDelegate>
 @property (nonatomic,strong) CenterViewController *centerVC;
 @property (nonatomic,strong) LeftPanelViewController *leftVC;
 @property (nonatomic,assign) BOOL showingLeftPanel;
+@property (nonatomic,strong) RightPanelViewController *rightVC;
+@property (nonatomic,assign) BOOL showingRightPanel;
 @end
 
 @implementation MainViewController
@@ -108,6 +112,14 @@
         self.showingLeftPanel = NO;
     }
     
+    if (_rightVC != nil) {
+        [self.rightVC.view removeFromSuperview];
+        self.rightVC = nil;
+        
+        _centerVC.rightButton.tag = 1;
+        self.showingRightPanel = NO;
+    }
+    
     // remove view shadows
     [self showCenterViewWithShadow:NO withOffset:0];
 }
@@ -137,7 +149,24 @@
 
 - (UIView *)getRightView
 {     
-    UIView *view = nil;
+    if (_rightVC == nil) {
+        self.rightVC = [[RightPanelViewController alloc] initWithNibName:@"RightPanelViewController" bundle:nil];
+        self.rightVC.view.tag = RIGHT_TAG;
+        self.rightVC.delegate = _centerVC;
+        
+        // vc containment
+        [self.view addSubview:self.rightVC.view];
+        [self addChildViewController:self.rightVC];
+        [_rightVC didMoveToParentViewController:self];
+        
+        _rightVC.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    }
+    
+    self.showingRightPanel = YES;
+    
+    [self showCenterViewWithShadow:YES withOffset:2];
+    
+    UIView *view = self.rightVC.view;
     return view;
 }
 
@@ -159,6 +188,16 @@
 
 - (void)movePanelLeft // to show right panel
 {
+    UIView *childView = [self getRightView];
+    [self.view sendSubviewToBack:childView];
+    
+    [UIView animateWithDuration:SLIDE_TIMING animations:^{
+        _centerVC.view.frame = CGRectMake(-self.view.frame.size.width+PANEL_WIDTH, 0, self.view.frame.size.width, self.view.frame.size.height);
+    } completion:^(BOOL finished) {
+        if (finished) {
+            _centerVC.rightButton.tag = 0;
+        }
+    }];
 }
 
 - (void)movePanelRight // to show left panel
