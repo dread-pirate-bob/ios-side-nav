@@ -99,6 +99,17 @@
 
 - (void)resetMainView
 {
+    // remove left view and reset variables if needed
+    if (_leftVC != nil) {
+        [self.leftVC.view removeFromSuperview];
+        self.leftVC = nil;
+        
+        _centerVC.leftButton.tag = 1;
+        self.showingLeftPanel = NO;
+    }
+    
+    // remove view shadows
+    [self showCenterViewWithShadow:NO withOffset:0];
 }
 
 - (UIView *)getLeftView
@@ -165,7 +176,14 @@
 }
 
 - (void)movePanelToOriginalPosition
-{    
+{
+    [UIView animateWithDuration:SLIDE_TIMING animations:^{
+        _centerVC.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [self resetMainView];
+        }
+    }];
 }
 
 #pragma mark -
