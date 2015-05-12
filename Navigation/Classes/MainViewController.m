@@ -19,12 +19,14 @@
 #define LEFT_TAG 2
 #define RIGHT_TAG 3
 
-@interface MainViewController () <CenterViewControllerDelegate>
+@interface MainViewController () <CenterViewControllerDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic,strong) CenterViewController *centerVC;
 @property (nonatomic,strong) LeftPanelViewController *leftVC;
 @property (nonatomic,assign) BOOL showingLeftPanel;
 @property (nonatomic,strong) RightPanelViewController *rightVC;
 @property (nonatomic,assign) BOOL showingRightPanel;
+@property (nonatomic,assign) BOOL showPanel;
+@property (nonatomic,assign) CGPoint preVelocity;
 @end
 
 @implementation MainViewController
@@ -85,6 +87,8 @@
     [self addChildViewController:_centerVC]; // access iVar
     
     [_centerVC didMoveToParentViewController:self];
+    
+    [self setupGestures];
     
 }
 
@@ -177,10 +181,80 @@
 
 - (void)setupGestures
 {
+    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(movePanel:)];
+    [panRecognizer setMinimumNumberOfTouches:1];
+    [panRecognizer setMaximumNumberOfTouches:1];
+    [panRecognizer setDelegate:self];
+    
+    [_centerVC.view addGestureRecognizer:panRecognizer];
 }
 
 -(void)movePanel:(id)sender
 {
+    UIPanGestureRecognizer *panGesture = sender;
+    [[[panGesture view] layer] removeAllAnimations];
+    
+    CGPoint translatedPoint = [panGesture translationInView:self.view];
+    CGPoint velocity = [panGesture velocityInView:[sender view]];
+    
+    if ([panGesture state] == UIGestureRecognizerStateBegan) {
+        UIView *childView = nil;
+        
+        if (velocity.x > 0) {
+            if (!_showingRightPanel) {
+                childView = [self getLeftView];
+            }
+        } else {
+            if (!_showingLeftPanel) {
+                childView = [self getRightView];
+            }
+        }
+        
+        [self.view sendSubviewToBack:childView];
+        [[sender view] bringSubviewToFront:[panGesture view]];
+    }
+    
+    if ([panGesture state] == UIGestureRecognizerStateEnded) {
+        if (velocity.x > 0) {
+            // gesture went right
+        } else {
+            // gesture went left
+        }
+        
+        if (!_showPanel) {
+            [self movePanelToOriginalPosition];
+        } else {
+            if (_showingLeftPanel) {
+                [self movePanelRight];
+            } else if (_showingRightPanel) {
+                [self movePanelLeft];
+            }
+        }
+    }
+    
+    if ([panGesture state] == UIGestureRecognizerStateChanged) {
+        if (velocity.x > 0) {
+            // gesture right
+        } else {
+            // gesture left
+        }
+        
+        // more tha halfway?  if so, show panel when done dragging by setting to YES(1)
+        _showPanel = abs([panGesture view].center.x - _centerVC.view.frame.size.width / 2) > _centerVC.view.frame.size.width / 2;
+        
+        // allow dragging only in x-coords by only updating x-coord with translation
+        [panGesture view].center = CGPointMake([panGesture view].center.x + translatedPoint.x, [panGesture view].center.y);
+        [panGesture setTranslation:CGPointMake(0, 0) inView:self.view];
+        
+        // to check for a change in direction, use this code
+        if (velocity.x * _preVelocity.x + velocity.y * _preVelocity.y > 0) {
+            // same direction
+        } else {
+            // opposite direction
+        }
+        
+        _preVelocity = velocity;
+    }
 }
 
 #pragma mark -
