@@ -7,6 +7,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainViewController">
             <connections>
+                <outlet property="containerView" destination="Bia-qG-QSi" id="ria-j7-DsI"/>
+                <outlet property="leftButton" destination="W26-WD-kWv" id="PFg-Sn-3ws"/>
+                <outlet property="mainView" destination="KSS-Pb-a6Y" id="xbJ-33-gcu"/>
+                <outlet property="rightButton" destination="oWD-eD-dyW" id="t8C-WS-4ru"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -14,10 +18,104 @@
         <view contentMode="scaleToFill" id="1">
             <rect key="frame" x="0.0" y="20" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KSS-Pb-a6Y">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Fd-Cg-zpn">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                            <subviews>
+                                <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oWD-eD-dyW">
+                                    <rect key="frame" x="237" y="19" width="75" height="36"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="75" id="P2n-eb-3tn"/>
+                                        <constraint firstAttribute="height" constant="36" id="Xze-Ad-rUw"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
+                                    <state key="normal" title="puppies" backgroundImage="btnBlack.png">
+                                        <color key="titleColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <state key="highlighted">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="rightButtonTapped:" destination="-1" eventType="touchUpInside" id="XlG-xY-pxq"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W26-WD-kWv">
+                                    <rect key="frame" x="8" y="19" width="75" height="36"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="75" id="3Uz-0Y-sEi"/>
+                                        <constraint firstAttribute="height" constant="36" id="7i5-jD-OOh"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
+                                    <state key="normal" title="kitties" backgroundImage="btnBlack.png">
+                                        <color key="titleColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <state key="highlighted">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="leftButtonTapped:" destination="-1" eventType="touchUpInside" id="FgR-fc-p9v"/>
+                                    </connections>
+                                </button>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="NWU" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eUv-9B-Eb1">
+                                    <rect key="frame" x="91" y="19" width="138" height="36"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="36" id="SZS-tV-773"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="oWD-eD-dyW" firstAttribute="leading" secondItem="eUv-9B-Eb1" secondAttribute="trailing" constant="8" id="0Gq-J9-a8E"/>
+                                <constraint firstItem="eUv-9B-Eb1" firstAttribute="leading" secondItem="W26-WD-kWv" secondAttribute="trailing" constant="8" id="LkB-HS-fxB"/>
+                                <constraint firstAttribute="centerY" secondItem="oWD-eD-dyW" secondAttribute="centerY" constant="-5" id="McG-JA-y0J"/>
+                                <constraint firstItem="W26-WD-kWv" firstAttribute="leading" secondItem="5Fd-Cg-zpn" secondAttribute="leading" constant="8" id="NIu-Ss-iFc"/>
+                                <constraint firstAttribute="trailing" secondItem="oWD-eD-dyW" secondAttribute="trailing" constant="8" id="Rm7-mK-Aun"/>
+                                <constraint firstAttribute="centerY" secondItem="W26-WD-kWv" secondAttribute="centerY" constant="-5" id="amb-ib-e4S"/>
+                                <constraint firstAttribute="centerY" secondItem="eUv-9B-Eb1" secondAttribute="centerY" constant="-5" id="c5e-o0-BbB"/>
+                                <constraint firstAttribute="height" constant="64" id="nfR-BV-yrE"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bia-qG-QSi">
+                            <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                            <color key="backgroundColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="Bia-qG-QSi" firstAttribute="leading" secondItem="KSS-Pb-a6Y" secondAttribute="leading" id="6an-pc-gr5"/>
+                        <constraint firstAttribute="trailing" secondItem="Bia-qG-QSi" secondAttribute="trailing" id="AsE-v0-gla"/>
+                        <constraint firstItem="Bia-qG-QSi" firstAttribute="top" secondItem="5Fd-Cg-zpn" secondAttribute="bottom" id="Ke2-4E-v8L"/>
+                        <constraint firstAttribute="trailing" secondItem="5Fd-Cg-zpn" secondAttribute="trailing" id="ccD-Fu-8SY"/>
+                        <constraint firstAttribute="bottom" secondItem="Bia-qG-QSi" secondAttribute="bottom" id="gfv-th-qui"/>
+                        <constraint firstItem="5Fd-Cg-zpn" firstAttribute="top" secondItem="KSS-Pb-a6Y" secondAttribute="top" id="t9S-ZA-44d"/>
+                        <constraint firstItem="5Fd-Cg-zpn" firstAttribute="leading" secondItem="KSS-Pb-a6Y" secondAttribute="leading" id="yrN-t4-nIk"/>
+                    </constraints>
+                </view>
+            </subviews>
             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+            <constraints>
+                <constraint firstItem="KSS-Pb-a6Y" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="VUi-fh-uGI"/>
+                <constraint firstItem="KSS-Pb-a6Y" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="XYU-I1-Ufk"/>
+                <constraint firstAttribute="bottom" secondItem="KSS-Pb-a6Y" secondAttribute="bottom" id="ZIG-jB-oJw"/>
+                <constraint firstAttribute="trailing" secondItem="KSS-Pb-a6Y" secondAttribute="trailing" id="fgP-We-3YG"/>
+                <constraint firstAttribute="trailing" secondItem="KSS-Pb-a6Y" secondAttribute="trailing" id="lTW-Fu-mnh"/>
+                <constraint firstAttribute="bottom" secondItem="KSS-Pb-a6Y" secondAttribute="bottom" id="nK9-Sv-ZBk"/>
+                <constraint firstItem="KSS-Pb-a6Y" firstAttribute="top" secondItem="1" secondAttribute="top" id="vCa-7b-Rnb"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
     </objects>
+    <resources>
+        <image name="btnBlack.png" width="134" height="49"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
