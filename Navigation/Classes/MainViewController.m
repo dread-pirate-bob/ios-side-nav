@@ -128,10 +128,6 @@
         self.showingRightPanel = NO;
     }
     
-    // re-enable both buttons
-    self.leftButton.enabled = YES;
-    self.rightButton.enabled = YES;
-    
     // remove view shadows
     [self showCenterViewWithShadow:NO withOffset:0];
 }
@@ -194,7 +190,10 @@
     [panRecognizer setMaximumNumberOfTouches:1];
     [panRecognizer setDelegate:self];
     
-    [_centerVC.view addGestureRecognizer:panRecognizer];
+    // TODO view or mainView?
+    // view might allow in-panel swipes?
+    // probably has to be consistent with usages below...
+    [self.view addGestureRecognizer:panRecognizer];
 }
 
 -(void)movePanel:(id)sender
@@ -202,12 +201,12 @@
     UIPanGestureRecognizer *panGesture = sender;
     [[[panGesture view] layer] removeAllAnimations];
     
-    CGPoint translatedPoint = [panGesture translationInView:self.containerView];
-    CGPoint velocity = [panGesture velocityInView:[sender view]];
+    CGPoint translatedPoint = [panGesture translationInView:self.view];
+    CGPoint velocity = [panGesture velocityInView:[panGesture view]];
     
     if ([panGesture state] == UIGestureRecognizerStateBegan) {
         UIView *childView = nil;
-        
+        // TODO small threshold on velocity?
         if (velocity.x > 0) {
             if (!_showingRightPanel) {
                 childView = [self getLeftView];
@@ -218,8 +217,8 @@
             }
         }
         
-        [self.containerView sendSubviewToBack:childView];
-        [[sender view] bringSubviewToFront:[panGesture view]];
+        [self.view sendSubviewToBack:childView];
+//        [[sender view] bringSubviewToFront:[panGesture view]];
     }
     
     if ([panGesture state] == UIGestureRecognizerStateEnded) {
@@ -247,12 +246,12 @@
             // gesture left
         }
         
-        // more tha halfway?  if so, show panel when done dragging by setting to YES(1)
-        _showPanel = abs([panGesture view].center.x - _centerVC.view.frame.size.width / 2) > _centerVC.view.frame.size.width / 2;
+        // more than halfway?  if so, show panel when done dragging by setting to YES(1)
+        _showPanel = abs([panGesture view].center.x - _centerVC.view.frame.size.width / 2) > self.view.frame.size.width / 2;
         
         // allow dragging only in x-coords by only updating x-coord with translation
         [panGesture view].center = CGPointMake([panGesture view].center.x + translatedPoint.x, [panGesture view].center.y);
-        [panGesture setTranslation:CGPointMake(0, 0) inView:self.containerView];
+        [panGesture setTranslation:CGPointMake(0, 0) inView:self.view];
         
         // to check for a change in direction, use this code
         if (velocity.x * _preVelocity.x + velocity.y * _preVelocity.y > 0) {
@@ -272,7 +271,6 @@
 {
     UIView *childView = [self getRightView];
     [self.view sendSubviewToBack:childView];
-    self.leftButton.enabled = NO;
     
     [UIView animateWithDuration:SLIDE_TIMING animations:^{
         self.view.frame = CGRectMake(-self.view.frame.size.width+PANEL_WIDTH, 0, self.view.frame.size.width, self.view.frame.size.height);
@@ -287,7 +285,6 @@
 {
     UIView *childView = [self getLeftView];
     [self.view sendSubviewToBack:childView];
-    self.rightButton.enabled = NO;
     
     [UIView animateWithDuration:SLIDE_TIMING animations:^{
         self.view.frame = CGRectMake(self.view.frame.size.width - PANEL_WIDTH, 0, self.view.frame.size.width, self.view.frame.size.height);
